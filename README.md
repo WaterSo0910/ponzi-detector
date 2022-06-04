@@ -22,6 +22,17 @@ detect ponzi scheme on ethereum contracts
 - Ponzi or not
   - stats
   - bytecode
+    - settings of train/validate
+    - preprocess logic
+      - composition features
+      - how to handle imbalanced data
+    - methods
+      - Random Forest
+      - Isolation Forest
+      - xgboost
+    - Result
+      - Importance of features  
+      - Validation score
 
 ## Ponzi definition
 
