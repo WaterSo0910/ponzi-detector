@@ -28,8 +28,9 @@ detect ponzi scheme on ethereum contracts
       - how to handle imbalanced data
     - methods
       - Random Forest
-      - Isolation Forest
       - xgboost
+      
+      - NLP NN
     - Result
       - Importance of features  
       - Validation score
