@@ -20,7 +20,7 @@ parser.add_argument("--sample", help="file containing sample contracts")
 args = parser.parse_args()
 verbose = args.verbose
 if (not args.sample):
-    ponzi_file = "./data/ponzi.csv"
+    ponzi_file = "./data/others/ponzi.csv"
 else:
     ponzi_file = args.sample
 
@@ -28,13 +28,23 @@ else:
 # %%
 key = "Y7ZP1HMWF1HTTB6EMAUYZDFF8RKQTVJHTU"
 ponzi = []
-starting_date = time.strptime("2015-08-30", "%Y-%m-%d")
-filename_price = './data/ether_price.csv'
+starting_date = datetime.datetime.strptime("2015-08-30", "%Y-%m-%d")
+filename_price = './data/others/ether_price.csv'
 prices = {}
 
 
 # %%
-
+# in tx = number of input transactions
+# out tx = number of output transactions
+# in eth = amount of incoming ETH
+# out eth = amount of outgoing ETH
+# in usd = amount of incoming USD
+# out usd = amount of outgoing USD
+# paying = number of distinct addresses sending ETH
+# paid = number of distinct addresses receiving ETH
+# date 1st tx = date of the first transaction
+# date last tx = date of the last transaction
+print("Address, In Tx, Out Tx, In ETH, Out ETH, In USD, Out USD, Paying, Paid, date 1st tx, date last tx")
 with open(filename_price, mode='r') as price_file:
     if (verbose):
         print("Retrieving exchange rates... ", end=" ")
@@ -75,7 +85,7 @@ def get_exchangerate(date):
 
 # %%
 with open(ponzi_file) as f:
-    reader = csv.reader(f, delimiter=',', quotechar='|')
+    reader = csv.reader(f, delimiter=',')
     for row in reader:
         addr = row[0]
         ponzi.append(addr)
@@ -84,10 +94,9 @@ for addr in ponzi:
     if (verbose):
         print("Retrieving transactions of contract ", addr, "... ", end=" ")
     sys.stdout.flush()
-    api = Account(api_key=key)
-    text = api.get_all_transactions(internal=False, offset=10)
-    tint = api.get_all_transactions(internal=True, offset=10)
-
+    api = Account(address=addr, api_key=key)
+    text = api.get_transaction_page(internal=False, page=1, offset=10000)
+    tint = api.get_transaction_page(internal=True, page=1, offset=10000)
     if (verbose):
         print("done")
 
