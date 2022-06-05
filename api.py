@@ -29,14 +29,20 @@ def Vectorize(text:str):
         if token!=None:
             sents.append(token)
     X = VEC.transform([' '.join(sents)])
-    y_pred = Model.predict(X)
-    return y_pred[0].item()
+    prob = Model.predict_proba(X)
+    if prob[0][0]>prob[0][1]:
+        return 0, prob[0][0].item()
+    else:
+        return 1, prob[0][1].item()
 
 @app.route("/api/ponzi",methods=['POST'])
 def hello_world():
     opcode = request.stream.read().decode("utf-8")
-    result = Vectorize(opcode)
-    return str(result)
+    result,prob = Vectorize(opcode)
+    return {
+        "label":result,
+        "prob":prob
+    }
 
 if __name__ == "__main__":
     app.run(debug=True)
