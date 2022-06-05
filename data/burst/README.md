@@ -20,3 +20,6 @@
 ## Problem
 
 - What is our time series unit?
+
+## Reference
+[How to deal with irregular time series data](https://www.notion.so/Corrupt-sparse-irregular-and-ugly-Deep-learning-on-time-series-887b823df439417bb8428a3474d939b3)
