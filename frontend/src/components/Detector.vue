@@ -33,18 +33,20 @@
         </v-btn>
         <v-progress-circular
           v-if="detect_status === 1"
-          :value="is_ponzi?score:100"
+          :value="score"
           :rotate="-90"
           :size="200"
           :width="15"
           :color="progressColor"
+          class="mb-4"
         >
           <h1>{{ is_ponzi ? "Ponzi" : "Safe" }}</h1>
         </v-progress-circular>
-
+        <div v-show="detect_status === 1 && is_ponzi">有{{ score }}%的可能性是龐式騙局</div>
+        <div v-show="detect_status === 1 && !is_ponzi">有{{ score }}%的可能性是安全合約</div>
       </v-col>
       <v-col>
-        <v-btn @click="reset" v-show="detect_status===1">RESET</v-btn>
+        <v-btn @click="reset" v-show="detect_status === 1">RESET</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -59,16 +61,17 @@ export default {
     opcode: "",
     detect_status: 0,
     progressing: false,
-    is_ponzi: true,
+    is_ponzi: false,
     score: 0,
   }),
 
   methods: {
-    reset(){
-      this.progressing = false
-      this.opcode = ""
-      this.score = 0 
-      this.detect_status = 0
+    reset() {
+      this.is_ponzi = false,
+      this.progressing = false;
+      this.opcode = "";
+      this.score = 0;
+      this.detect_status = 0;
     },
     setVal(label, score) {
       this.is_ponzi = label;
