@@ -14,7 +14,7 @@
         <v-textarea
           v-model="opcode"
           row-height="10"
-          rows="28"
+          rows="20"
           solo
           placeholder="OPCODE HERE"
           outlined
