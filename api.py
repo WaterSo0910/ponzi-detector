@@ -4,8 +4,10 @@ import re
 import pickle
 from flask import request
 from flask import Flask
-
+from flask_cors import CORS, cross_origin
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 with open("data/code/opcode_list.txt", 'r') as F:
     OPCODES_SET = set(F.read().split())
@@ -25,6 +27,8 @@ def opcodePreprocess(opcode: str):
 def Vectorize(text:str):
     sents = []
     for row in text.split("\n"):
+        line = row.split()
+        if len(line)==0: continue
         token = opcodePreprocess(row.split()[0])
         if token!=None:
             sents.append(token)
@@ -36,6 +40,7 @@ def Vectorize(text:str):
         return 1, prob[0][1].item()
 
 @app.route("/api/ponzi",methods=['POST'])
+@cross_origin()
 def hello_world():
     opcode = request.stream.read().decode("utf-8")
     result,prob = Vectorize(opcode)
