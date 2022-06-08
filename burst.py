@@ -67,23 +67,14 @@ def visualize_user_profit_stats(df_addr):
     df_pyramid = df_addr.groupby('p/e').count().reset_index()
     df_pyramid = df_pyramid.rename(columns={
         "address": "count",
-        "pay": "count1"
     })
-    df_pyramid = df_pyramid.filter(["p/e", "count", "count1"])
+    df_pyramid = df_pyramid.filter(["p/e", "count"])
     df_pyramid["p/e"] = round(df_pyramid["p/e"], 1)
     fig, ax = plt.subplots(figsize=(12, 8))
     sns_plot = sns.barplot(ax=ax, data=df_pyramid, x='count',
                            y='p/e', orient='horizontal', ci=None)
     fig = sns_plot.get_figure()
     fig.savefig(f"{OUTPUT_DIR}pe_count.png")
-    df_pyramid["count1"] = df_pyramid["count1"]*-1
-
-    fig, ax = plt.subplots(figsize=(12, 8))
-    bar_plot = sns.barplot(ax=ax, x='count', y='p/e', data=df_pyramid,
-                           lw=0, orient='horizontal', ci=None)
-    bar_plot = sns.barplot(ax=ax, x='count1', y='p/e', data=df_pyramid,
-                           lw=0, orient='horizontal', ci=None)
-    plt.savefig(f"{OUTPUT_DIR}pe_pyramid.png")
 
 
 if __name__ == '__main__':
@@ -93,7 +84,9 @@ if __name__ == '__main__':
     df_merge = merge_tx(df_int, df_ext)
     # Time-series burst
     df_burst = get_burst_stats(df_merge)
-    visualize_burst(df_burst)
+    # visualize_burst(df_burst)
     # User profits stats
     df_addr = get_user_profit_stats(df_merge)
-    visualize_user_profit_stats(df_addr)
+    # visualize_user_profit_stats(df_addr)
+    # predict burst
+    print(df_merge.columns)
